@@ -15,11 +15,14 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResult;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
+
+import java.util.ArrayList;
 
 /**
  * Created by Nikita on 18-07-2017.
@@ -28,7 +31,7 @@ import com.google.android.gms.location.LocationSettingsStatusCodes;
 public class LogDebug{
 
     private static final String TAG = "SUPER_APP";
-    protected static final int REQUEST_CHECK_SETTINGS = 0x1;
+    public static final int REQUEST_CHECK_SETTINGS = 0x1;
     private Context context;
     public static void logD(String messaage){
         Log.d(TAG, messaage);
@@ -136,4 +139,21 @@ public class LogDebug{
             }
         });
     }
+
+    public static void createGeofence(Context context){
+        ArrayList<Geofence> mGeofences = new ArrayList<>();
+        mGeofences.add(new Geofence.Builder().setRequestId("Bangalore-Puma-Aceturtle")
+                // The coordinates of the center of the geofence and the radius in meters.
+                .setCircularRegion(12.9710688, 77.6410726,
+                        100)
+                .setRequestId("Ace" + "#" + "Bangalore-Puma-Aceturtle" + "#"
+                        + 12.9710688 + "#" + 77.6410726)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE).setLoiteringDelay(30000)
+                .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER | Geofence.GEOFENCE_TRANSITION_DWELL
+                        | Geofence.GEOFENCE_TRANSITION_EXIT)
+                .build());
+        // Add the geofences to the GeofenceStore object.
+        new GeofenceStore(context, mGeofences);
+    }
+
 }
